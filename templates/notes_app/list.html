@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% extends "notes_app/base.html" %}
+    {% block body_block%}
+
+    <h1>Hello and welcome to the site!</h1>
+    <h1>This is the home page</h1>
+<h3><a href="note_action/">Add new note</a></h3>
+<!--<h3><a href="/notes_app/editnote/{{notes.id}}">Add new note</a></h3>-->
+
+    {% if object_list %}
+                <ul>
+                     {% for notes in object_list %}
+                     <li><span class="smallestText">{{notes.created_date|date:"d-m-Y"}}</span><a href="/note_action/{{notes.id}}">{{notes.note|truncatewords:5}}</a>
+                         <a class="text-danger" href="/delete_note/{{notes.id}}">Delete</a></li>
+                    {% endfor %}
+
+               </ul>
+                {% include "notes_app/pagination.html" %}
+    {% else %}
+                <strong>There are no notes available.</strong>
+    {% endif %}
+
+
+
+    {% endblock %}
