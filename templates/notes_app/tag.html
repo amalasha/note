@@ -1,8 +1,22 @@
 <!DOCTYPE html>
 {% extends "notes_app/base.html" %}
-    {% block body_block%}
+{% block body_block %}
 
-    <h1>Hello and tag!</h1>
-    <h1>This is the tag.html page</h1>
+{% csrf_token %}
+<h1>This is tags page</h1>
+<button type="button" data-type="tag"  class="btn btn-warning add_new_tag">Add a new tag</button>
+{% if object_list %}
+<ul id="tags">
+    {% for tags in object_list %}
 
-    {% endblock %}
+    <a href="/tag_action/{{tags.id}}">{{tags.tag}}</a>
+        <button type="button" class="text-danger delete_tag" data-id="{{tags.id}}" >X</button>
+    {% endfor %}
+
+</ul>
+{% include "notes_app/pagination.html" %}
+{% else %}
+<strong>There are no tags available.</strong>
+{% endif %}
+
+{% endblock %}

@@ -1,25 +1,60 @@
 <!DOCTYPE html>
 {% extends "notes_app/base.html" %}
-    {% block body_block%}
+{% block body_block%}
 
-    <h1>Hello and welcome to the site!</h1>
-    <h1>This is the home page</h1>
-<h3><a href="note_action/">Add new note</a></h3>
-<!--<h3><a href="/notes_app/editnote/{{notes.id}}">Add new note</a></h3>-->
+<h1>Hello and welcome to the site!</h1>
+<h1>This is the home page</h1>
 
-    {% if object_list %}
-                <ul>
-                     {% for notes in object_list %}
-                     <li><span class="smallestText">{{notes.created_date|date:"d-m-Y"}}</span><a href="/note_action/{{notes.id}}">{{notes.note|truncatewords:5}}</a>
-                         <a class="text-danger" href="/delete_note/{{notes.id}}">Delete</a></li>
-                    {% endfor %}
+<h2><a href="/note_action/">Add new note</a></h2>
+<select id="tag_id">
+    <option value="0">All</option>
+    {% for tags in tag %}
+        {% if selected_id == tags.id %}
+            <option value="{{ tags.id }}" selected >{{ tags.tag }}</option>
+        {%else%}
+            <option value="{{ tags.id }}" >{{ tags.tag }}</option>
+        {% endif %}
+    {% endfor %}
+</select>
+{% if note %}
+<ul>
+    {% for notes in note %}
+    <li><span class="smallestText">{{ notes.created_date|date:"N j, o,"  }} {{ notes.created_date|time:"P" }}</span><a href="/note_action/{{notes.id}}">{{notes.note|truncatewords:5}}</a>
+        <button type="button" class="text-danger delete_note" data-id="{{notes.id}}" >Delete</button></li>
+    {% endfor %}
 
-               </ul>
-                {% include "notes_app/pagination.html" %}
-    {% else %}
-                <strong>There are no notes available.</strong>
-    {% endif %}
+</ul>
+
+<div class="pagination">
+
+    <span class="step-links">
+
+        {% if note.has_previous %}
+
+            <a href="?page={{ note.previous_page_number }}">previous</a>
+
+        {% endif %}
+
+        <span class="current">
+
+            Page {{ note.number }} of {{ note.paginator.num_pages }}.
+
+        </span>
+
+        {% if note.has_next %}
+
+            <a href="?page={{ note.next_page_number }}">next</a>
+
+        {% endif %}
+
+    </span>
+
+</div>
+{% include "notes_app/pagination.html" %}
+{% else %}
+<br>
+<strong>There are no notes available.</strong>
+{% endif %}
 
 
-
-    {% endblock %}
+{% endblock %}
