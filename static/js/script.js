@@ -13,11 +13,11 @@ $(document).ready(function() {
             window.location.href = '/delete_tag/' + id
         }
     });
-
+    // To add tag
     $('body').on('click','.add_new_tag',function(){
             var type = $(this).attr('data-type')
-            var tag = prompt("Enter the tag name?");
-            if (tag != null) {
+            var tag = prompt("Please enter the tag name");
+            if (tag != null || tag != '') {
                 $.ajax({
                     type: "POST",
                     url: '/ajax/addtag',
@@ -32,8 +32,16 @@ $(document).ready(function() {
                             $('#id_tags').append(str)
                             }
                          if(type = 'tag'){
-                            var str = '<a href="/tag_action/'+data.id+'">'+data.tag+'</a>'
-                            str += '<button type="button" class="text-danger delete_tag" data-id="'+data.id+'">X</button>'
+
+                                var str = '    <div class="panel col-lg-4 mt-5">'
+                                   str += ' <div class="btn-group" role="group">'
+                                   str += ' <button style="min-width:150px" class="btn btn-outline-primary">'+data.tag+'</button>'
+                                    str += '<a href="/tag_action/'+data.id+'" class="btn btn-success">'
+                                    str += '<span class="glyphicon glyphicon-pencil"></span>'
+                                    str += '</a>'
+                                    str += '<button type="button" class=" btn btn-danger delete_tag" data-id="'+data.id+'">X</button>'
+                                    str += '</div></div>'
+
                             $('#tags').prepend(str)
                             }
 

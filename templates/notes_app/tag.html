@@ -3,20 +3,41 @@
 {% block body_block %}
 
 {% csrf_token %}
-<h1>This is tags page</h1>
-<button type="button" data-type="tag"  class="btn btn-warning add_new_tag">Add a new tag</button>
-{% if object_list %}
-<ul id="tags">
-    {% for tags in object_list %}
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+                <button type="button" data-type="tag" class="btn btn-warning add_new_tag">Add a new tag</button>
+            </div>
+            <h4>Manage Tags</h4></div>
+        <div class="panel-body">
+            {% if object_list %}
+            <div id="tags">
+                {% for tags in object_list %}
+                <div class="panel col-lg-4 mt-5">
+                    <div class="btn-group" role="group">
+                        <button style="min-width:150px" class="btn btn-outline-primary"> {{tags.tag}}</button>
+                        <a href="/tag_action/{{tags.id}}" class="btn btn-success">
+                           <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                        <button type="button" class=" btn btn-danger delete_tag" data-id="{{tags.id}}">X</button>
+                    </div>
+                </div>
+                <!--<li>-->
+                    <!--<a href="/tag_action/{{tags.id}}">{{tags.tag}}</a>-->
+                    <!--<button type="button" class="text-danger delete_tag" data-id="{{tags.id}}">X</button>-->
+                <!--</li>-->
+                {% endfor %}
 
-    <a href="/tag_action/{{tags.id}}">{{tags.tag}}</a>
-        <button type="button" class="text-danger delete_tag" data-id="{{tags.id}}" >X</button>
-    {% endfor %}
+            </div>
+        </div>
+        <div class="panel-footer">
+            {% include "notes_app/pagination.html" %}
+            {% else %}
+            <strong>There are no tags available.</strong>
+            {% endif %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
 
-</ul>
-{% include "notes_app/pagination.html" %}
-{% else %}
-<strong>There are no tags available.</strong>
-{% endif %}
-
-{% endblock %}

@@ -1,31 +1,60 @@
 <!DOCTYPE html>
 {% extends "notes_app/base.html" %}
 {% block body_block%}
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+                <button type="button" data-type="notes" class="btn btn-warning add_new_tag">Add a new tag</button>
+            </div>
+            <h4>Add Notes</h4></div>
+        <form method="POST" action="/note_action/">{% csrf_token %}
 
-<h1>Hello and welcome to the site!</h1>
-<h1>This is the home page</h1>
+            <div class="panel-body">
 
-<h2><a href="/note_action/">Add new note</a></h2>
-<select id="tag_id">
-    <option value="0">All</option>
-    {% for tags in tag %}
-        {% if selected_id == tags.id %}
-            <option value="{{ tags.id }}" selected >{{ tags.tag }}</option>
-        {%else%}
-            <option value="{{ tags.id }}" >{{ tags.tag }}</option>
-        {% endif %}
-    {% endfor %}
-</select>
-{% if note %}
-<ul>
-    {% for notes in note %}
-    <li><span class="smallestText">{{ notes.created_date|date:"N j, o,"  }} {{ notes.created_date|time:"P" }}</span><a href="/note_action/{{notes.id}}">{{notes.note|truncatewords:5}}</a>
-        <button type="button" class="text-danger delete_note" data-id="{{notes.id}}" >Delete</button></li>
-    {% endfor %}
+                {{ form.as_p }}
 
-</ul>
 
-<div class="pagination">
+            </div>
+            <div class="panel-footer text-right">
+                <button type="submit" class="btn btn-success">Save</button>
+                <button type="Reset" class="btn  btn-default">Clear</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4> List of notes</h4></div>
+        <div class="panel-body">
+            <div class="row col-lg-4 col-lg-offset-4">
+                <select id="tag_id" class="form-control">
+                    <option value="0">All</option>
+                    {% for tags in tag %}
+                    {% if selected_id == tags.id %}
+                    <option value="{{ tags.id }}" selected>{{ tags.tag }}</option>
+                    {%else%}
+                    <option value="{{ tags.id }}">{{ tags.tag }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="row col-lg-12">
+                {% if note %}
+                <ul>
+                    {% for notes in note %}
+                    <li><span>{{ notes.created_date|date:"N j, o,"  }} {{ notes.created_date|time:"P " }}</span><a
+                            href="/note_action/{{notes.id}}">{{notes.note|truncatewords:5}}</a>
+                        <button type="button" class="btn btn-outline-danger delete_note" data-id="{{notes.id}}">Delete</button>
+                    </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="pagination">
 
     <span class="step-links">
 
@@ -37,7 +66,7 @@
 
         <span class="current">
 
-            Page {{ note.number }} of {{ note.paginator.num_pages }}.
+            Page {{ note.number }} of {{ note.paginator.num_pages }}
 
         </span>
 
@@ -49,12 +78,14 @@
 
     </span>
 
-</div>
-{% include "notes_app/pagination.html" %}
-{% else %}
-<br>
-<strong>There are no notes available.</strong>
-{% endif %}
+            </div>
 
+            {% else %}
+            <br>
+            <strong>There are no notes available.</strong>
+            {% endif %}
+        </div>
+    </div>
+</div>
 
 {% endblock %}
